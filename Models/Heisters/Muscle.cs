@@ -19,5 +19,9 @@ namespace heist_part_II
             _bank.securityGuardScore -= SkillLevel;
             Console.WriteLine($"{Name} removed the security guards by {SkillLevel} points.");
         }
+
+        public void PrintProfile (){
+            Console.WriteLine($"{Name} is a Muscle that has the skill level of {SkillLevel} and demands a cut of {PercentageCut}");
+        }
     }
 }

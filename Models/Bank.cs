@@ -8,7 +8,7 @@ namespace heist_part_II
             vaultScore = _vault;
             securityGuardScore = _security;
         }
-        public int cashOnHand { get; set; }
+        public decimal cashOnHand { get; set; }
         public int alarmScore { get; set; }
         public int vaultScore { get; set; }
         public int securityGuardScore { get; set; }

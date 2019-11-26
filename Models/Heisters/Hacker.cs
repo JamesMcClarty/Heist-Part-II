@@ -20,5 +20,8 @@ namespace heist_part_II
             _bank.alarmScore -= SkillLevel;
             Console.WriteLine($"{Name} hacks the bank's camera by {SkillLevel} points.");
         }
+        public void PrintProfile (){
+            Console.WriteLine($"{Name} is a Hacker that has the skill level of {SkillLevel} and demands a cut of {PercentageCut}");
+        }
     }
 }

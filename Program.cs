@@ -79,7 +79,7 @@ namespace heist_part_II
                     {
                         Console.WriteLine("Error. Try again.");
                     }
-                    if (skillNum <= 0 || skillNum > 3)
+                    if (skillNum <= 0 || skillNum > 100)
                     {
                         Console.WriteLine("Sorry. That's not a valid skill number.");
                     }
@@ -96,7 +96,7 @@ namespace heist_part_II
                     {
                         Console.WriteLine("Error. Try again.");
                     }
-                    if (cutNum <= 0 || cutNum > 3)
+                    if (cutNum <= 0 || cutNum > 100)
                     {
                         Console.WriteLine("Sorry. That's not a valid cut number.");
                     }
@@ -116,18 +116,75 @@ namespace heist_part_II
                         LockSpecialist newHeister3 = new LockSpecialist(name, skillNum, cutNum);
                         rolodex.Add(newHeister3);
                         break;
-                }                                   
+                }
             }
 
             //Bank Creation
             Random random = new Random();
-            Bank bank = new Bank(random.Next(50000,1000000), random.Next(0,100), random.Next(0,100), random.Next(0,100));
-            
-
+            Bank bank = new Bank(random.Next(50000, 1000000), random.Next(0, 100), random.Next(0, 100), random.Next(0, 100));
+            Dictionary<string, int> recon = new Dictionary<string, int>();
+            recon.Add("Alarm", bank.alarmScore);
+            recon.Add("Security Guards", bank.securityGuardScore);
+            recon.Add("Vault", bank.vaultScore);
+            recon.OrderBy(re => re.Value);
 
             Console.WriteLine("Bain did his research.");
-            Console.WriteLine("The");
+            Console.WriteLine($"The bank's strength is in {recon.Last().Key}");
+            Console.WriteLine($"But the bank's weakness is in {recon.First().Key}");
+            Console.WriteLine("///////////////////////////////////////////////////");
 
+            Console.WriteLine("The people in your group are:");
+            int i = 1;
+            foreach (IRobber heister in rolodex)
+            {
+                Console.Write($"{i}. ");
+                heister.PrintProfile();
+                i++;
+            }
+
+            List<IRobber> chosenRobbers = new List<IRobber>();
+
+            while (true)
+            {
+                Console.WriteLine("Please type in the number of heister you'd like to hire. Enter nothing to continue.");
+                try
+                {
+                    string input = Console.ReadLine();
+                    if(input == ""){
+                        break;
+                    }
+                    int chosenNum = int.Parse(input) - 1;
+                    chosenRobbers.Add(rolodex[chosenNum]);
+                    Console.WriteLine($"{rolodex[chosenNum].Name} has been added.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Sorry. That won't work. Try again.");
+                }
+            }
+            foreach (IRobber robber in chosenRobbers)
+            {
+                robber.PerformSkill(bank);
+            }
+
+            if (bank.IsSecure() == false)
+            {
+                Console.WriteLine("Heist Successful! Just as planned!");
+                Console.WriteLine($"You all scored {bank.cashOnHand}!");
+                foreach (IRobber robber in chosenRobbers)
+                {
+                    decimal pay = bank.cashOnHand * robber.PercentageCut / 100;
+                    Console.WriteLine($"{robber.Name} earned {pay}");
+                    bank.cashOnHand = bank.cashOnHand - pay;
+                }
+                Console.WriteLine($"You earned {bank.cashOnHand}.");
+            }
+
+            else if (bank.IsSecure() == true)
+            {
+                Console.WriteLine("You've all been apprehended! Try again when Bain bails you out.");
+            }
         }
+
     }
 }
