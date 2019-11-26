@@ -19,5 +19,9 @@ namespace heist_part_II
             _bank.vaultScore -= SkillLevel;
             Console.WriteLine($"{Name} picks the lock of the vault by {SkillLevel} points.");
         }
+
+        public void PrintProfile (){
+            Console.WriteLine($"{Name} is a Lock Specialist that has the skill level of {SkillLevel} and demands a cut of {PercentageCut}");
+        }
     }
 }
